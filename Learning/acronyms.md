@@ -1,0 +1,1 @@
+DDD - Domain-Driven Design is a collection of principles and patterns that help developers craft elegant object systems
