@@ -1,0 +1,1 @@
+- `ctrl + shift + i` - Context Menu / Inspect 

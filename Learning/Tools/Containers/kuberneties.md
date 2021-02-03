@@ -1,0 +1,1 @@
+- list all pods: `kubectl get pod -o wide`

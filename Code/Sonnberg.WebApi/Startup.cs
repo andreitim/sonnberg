@@ -30,6 +30,7 @@ namespace Sonnberg.WebApi
             services.AddPersistanceServices();
 
             services.AddControllers();
+            services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -56,6 +57,7 @@ namespace Sonnberg.WebApi
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
