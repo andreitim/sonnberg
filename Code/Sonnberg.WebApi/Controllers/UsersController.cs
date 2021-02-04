@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sonnberg.Persistance.Entities;
 using Sonnberg.Persistance.Repositories;
@@ -8,15 +9,13 @@ namespace Sonnberg.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class UsersController : ApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public UsersController(IUnitOfWork unitOfWork)
+        public UsersController(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            _unitOfWork = unitOfWork;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyCollection<SonnUser>>> GetUsers()
         {
@@ -24,6 +23,7 @@ namespace Sonnberg.WebApi.Controllers
             return Ok(users);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<SonnUser>> GetUser(int id)
         {

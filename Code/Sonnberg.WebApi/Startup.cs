@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,16 +20,13 @@ namespace Sonnberg.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SonnbergDbContext>(options =>
-            {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
 
-            services.AddPersistanceServices();
+            services.AddApplicationServices(Configuration)
+                    .AddPersistanceServices();
 
             services.AddControllers();
             services.AddCors();
+            services.AddIdentityServices(Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -58,6 +54,7 @@ namespace Sonnberg.WebApi
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

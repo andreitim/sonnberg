@@ -33,6 +33,7 @@
 * `add-migration MigrationName` or `dotnet ef migrations add MigrationName`
 * `update-database [TargetMigration]` or `dotnet ef database update [TargetMigration]`
 
+* `dotnet ef database drop` - drops the database.
 
 ## Attributes
 

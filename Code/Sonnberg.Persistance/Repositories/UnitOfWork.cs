@@ -21,7 +21,7 @@ namespace Sonnberg.Persistance.Repositories
 
         public IRepository<SonnProperty> Properties { get; }
 
-        public async Task<int> SaveAsync(CancellationToken cancellationToken)
+        public async Task<int> SaveAsync(CancellationToken cancellationToken = default)
             => await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

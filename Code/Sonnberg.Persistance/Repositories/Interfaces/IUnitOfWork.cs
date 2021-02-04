@@ -10,6 +10,6 @@ namespace Sonnberg.Persistance.Repositories
 
         IRepository<SonnProperty> Properties { get; }
 
-        Task<int> SaveAsync(CancellationToken cancellationToken);
+        Task<int> SaveAsync(CancellationToken cancellationToken = default);
     }
 }
