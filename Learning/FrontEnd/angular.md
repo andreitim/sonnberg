@@ -6,7 +6,10 @@
 - `ng new client`
 - `ng server`
 - `ng add ngx-bootstrap`
-- `npm install font-awesome`
+- `npm install font-awesome --save`
+- `npm install ngx-toastr --save`
+- `npm install @angular/animations --save`
+- `npm install bootswatch` => bootsrap themes
 
 ## Angular Modules
 
@@ -23,6 +26,12 @@
 - `ng generate service account --skip-tests`
   * a service is a singleton
   * is injectable
+
+- `ng generate service account --skip-tests`  
+
+- `ng generate guard auth --skip-tests`
+
+- `ng generate module shared --flat`
 
 ## Notions
 
