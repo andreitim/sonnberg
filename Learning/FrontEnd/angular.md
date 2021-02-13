@@ -33,6 +33,8 @@
 
 - `ng generate module shared --flat`
 
+- `ng generate interceptor error --skip-tests`
+
 ## Notions
 
 - Two way binding `[(ngModel)]="model.username"`

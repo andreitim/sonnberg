@@ -40,13 +40,16 @@ namespace Sonnberg.WebApi.Controllers
             await _unitOfWork.SaveAsync();
 
             var userDto = new UserDto { Username = user.Username, Token = _tokenService.CreateToken(user) };
-            return base.Ok(userDto);
+            return Ok(userDto);
         }
 
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var users = await GetUsersAsync(loginDto.Username);
             var user = users.SingleOrDefault();
 
@@ -61,7 +64,7 @@ namespace Sonnberg.WebApi.Controllers
                 return Unauthorized("Invalid password");
 
             var userDto = new UserDto { Username = user.Username, Token = _tokenService.CreateToken(user) };
-            return base.Ok(userDto);
+            return Ok(userDto);
 
         }
 
