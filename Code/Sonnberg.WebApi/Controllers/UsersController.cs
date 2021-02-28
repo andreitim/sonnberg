@@ -1,34 +1,33 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sonnberg.Persistance.Entities;
+using Sonnberg.Persistance.Dtos;
 using Sonnberg.Persistance.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Sonnberg.WebApi.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ApiController
     {
-        public UsersController(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public UsersController(IUnitOfWork unitOfWork, IMapper mapper)
+            : base(unitOfWork, mapper)
         {
         }
 
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyCollection<SonnUser>>> GetUsers()
+        public async Task<ActionResult<IReadOnlyCollection<UserDto>>> GetUsers()
         {
-            var users = await _unitOfWork.Users.GetAllAsync();
+            var users = await _unitOfWork.Users.GetAllWithPhotosAsync();
             return Ok(users);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<SonnUser>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var user = await _unitOfWork.Users.GetAsync(id);
-            return Ok(user);
+            return Ok(_mapper.Map<UserDto>(user));
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Sonnberg.WebApi.Dtos
 {
-    public class LoginDto
+    public class UserCredentialsDto
     {
         [Required]
         public string Username { get; set; }

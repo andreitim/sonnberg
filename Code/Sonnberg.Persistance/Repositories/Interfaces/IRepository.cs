@@ -1,26 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sonnberg.Persistance.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetAsync(int id);
+        Task<TEntity> GetAsync(int id, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
 
-        Task<IReadOnlyCollection<TEntity>> GetAllAsync();
+        Task<IReadOnlyCollection<TEntity>> FindAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            CancellationToken cancellationToken = default);
 
-        Task<IReadOnlyCollection<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<bool> AnyAsync(CancellationToken cancellationToken = default);
 
-        TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> SingleOrDefaultAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            CancellationToken cancellationToken = default);
+
+        void Update(TEntity entity);
 
         void Add(TEntity entity);
-
-        void AddRange(IEnumerable<TEntity> entities);
+        void AddRange(IReadOnlyCollection<TEntity> entities);
 
         void Remove(TEntity entity);
-
-        void RemoveRange(IEnumerable<TEntity> entities);
+        void RemoveRange(IReadOnlyCollection<TEntity> entities);
     }
 }

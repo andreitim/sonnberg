@@ -8,16 +8,16 @@ namespace Sonnberg.Persistance.EntitiesConfigurations
     {
         public void Configure(EntityTypeBuilder<SonnProperty> builder)
         {
-            builder.HasOne(p => p.Location)
-                   .WithMany(l => l.Properties)
-                   .HasForeignKey(p => p.LocationId);
+            builder.Property(p => p.Name)
+                   .IsRequired()
+                   .HasMaxLength(255);
 
             builder.HasMany(p => p.Suites)
                    .WithOne(s => s.Property)
-                   .HasForeignKey(s => s.PropertyId);
+                   .IsRequired();
 
-            builder.HasMany(p => p.Tags)
-                   .WithMany(t => t.Properties);
+            builder.HasMany(p => p.Photos)
+                   .WithOne();
         }
     }
 }

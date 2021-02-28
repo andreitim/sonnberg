@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Sonnberg.Persistance.Entities;
 using Sonnberg.Persistance.Repositories;
 using Sonnberg.WebApi.Dtos;
 using Sonnberg.WebApi.Services;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Sonnberg.WebApi.Controllers
@@ -15,37 +14,31 @@ namespace Sonnberg.WebApi.Controllers
     {
         private readonly ITokenService _tokenService;
 
-        public AccountController(IUnitOfWork unitOfWork, ITokenService tokenService)
-            : base(unitOfWork)
+        public AccountController(IUnitOfWork unitOfWork, ITokenService tokenService, IMapper mapper)
+            : base(unitOfWork, mapper)
         {
             _tokenService = tokenService;
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<LoggedInUserDto>> Register(RegisterDto registerDto)
         {
             if (await UserExistsAsync(registerDto.Username))
                 return BadRequest("Username is taken");
 
-            using var hmac = new HMACSHA512();
-
-            var user = new SonnUser
-            {
-                Username = registerDto.Username,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
-            };
+            var user = new SonnUser { Username = registerDto.Username };
+            user.SetPassword(registerDto.Password);
 
             _unitOfWork.Users.Add(user);
             await _unitOfWork.SaveAsync();
 
-            var userDto = new UserDto { Username = user.Username, Token = _tokenService.CreateToken(user) };
+            var userDto = new LoggedInUserDto { Username = user.Username, Token = _tokenService.CreateToken(user) };
             return Ok(userDto);
         }
 
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<LoggedInUserDto>> Login(UserCredentialsDto loginDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -56,16 +49,11 @@ namespace Sonnberg.WebApi.Controllers
             if (user == null)
                 return Unauthorized("Invalid username");
 
-            using var hmac = new HMACSHA512(user.PasswordSalt);
-
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-
-            if (!computedHash.SequenceEqual(user.PasswordHash))
+            if (!user.ValidatePassword(loginDto.Password))
                 return Unauthorized("Invalid password");
 
-            var userDto = new UserDto { Username = user.Username, Token = _tokenService.CreateToken(user) };
+            var userDto = new LoggedInUserDto { Username = user.Username, Token = _tokenService.CreateToken(user) };
             return Ok(userDto);
-
         }
 
         private async Task<bool> UserExistsAsync(string username)

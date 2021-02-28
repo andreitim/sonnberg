@@ -8,7 +8,7 @@ namespace Sonnberg.Persistance
     {
         public static IServiceCollection AddPersistanceServices(this IServiceCollection services)
         {
-            services.AddScoped<IRepository<SonnUser>, Repository<SonnUser>>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IRepository<SonnProperty>, Repository<SonnProperty>>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;

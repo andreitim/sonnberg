@@ -2,14 +2,20 @@
 
 namespace Sonnberg.Persistance.Entities
 {
-    public class SonnProperty : SonnResource
+    public class SonnProperty
     {
-        public int LocationId { get; set; }
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int UserId { get; set; }
+
+        public SonnUser User { get; set; }
 
         public SonnLocation Location { get; set; }
 
-        public IList<SonnSuite> Suites { get; set; }
+        public ICollection<SonnPhoto> Photos { get; set; }
 
-        public IList<SonnPropertyTag> Tags { get; set; }
+        public ICollection<SonnSuite> Suites { get; set; }
     }
 }

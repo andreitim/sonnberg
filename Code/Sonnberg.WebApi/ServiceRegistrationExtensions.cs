@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Sonnberg.Persistance;
+using Sonnberg.WebApi.Dtos;
 using Sonnberg.WebApi.Services;
 using System.Text;
 
@@ -15,10 +16,12 @@ namespace Sonnberg.WebApi
             this IServiceCollection services,
             IConfiguration config)
         {
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
+
             services.AddDbContext<SonnbergDbContext>(options =>
             {
                 options.UseSqlite(config.GetConnectionString("DefaultConnection"));
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
 
             services.AddScoped<ITokenService, TokenService>();

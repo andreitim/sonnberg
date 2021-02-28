@@ -8,7 +8,7 @@ namespace Sonnberg.Persistance.Repositories
     {
         private readonly SonnbergDbContext _dbContext;
 
-        public UnitOfWork(IRepository<SonnUser> usersRepository,
+        public UnitOfWork(IUsersRepository usersRepository,
                           IRepository<SonnProperty> propertiesRepository,
                           SonnbergDbContext dbContext)
         {
@@ -17,7 +17,7 @@ namespace Sonnberg.Persistance.Repositories
             Properties = propertiesRepository;
         }
 
-        public IRepository<SonnUser> Users { get; }
+        public IUsersRepository Users { get; }
 
         public IRepository<SonnProperty> Properties { get; }
 

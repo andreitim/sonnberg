@@ -31,6 +31,8 @@
             "DefaultConnection": "Server=.\\sqlexpress;Database=StudioWeb_TypeCache;User ID=sa;Password=1qazXSW@;"
         }
 * `add-migration MigrationName` or `dotnet ef migrations add MigrationName`
+* `dotnet ef migrations remove`
+
 * `update-database [TargetMigration]` or `dotnet ef database update [TargetMigration]`
 
 * `dotnet ef database drop` - drops the database.
@@ -107,11 +109,14 @@
                              .WithRequiredDependent(c => c.Cover);
 
   2. Using IEntityTypeConfiguration
-
           
                 modelBuilder.ApplyConfiguration(new PropertyConfiguration());
 
                 public class PropertyConfiguration : IEntityTypeConfiguration<Property>
+
+## Relationships
+
+* If a relation is fully defined by specifying the foreigh key => the foreigh key is not nullable => cascade delete will be set to true.
 
 ## LINQ
 
@@ -196,9 +201,8 @@ To get records in a given page.
 
 * Explicit loading 
         
-        context.Cources.Where(c => c.AuthorId == author.Id && c.price == 0)
+        context.Courses.Where(c => c.AuthorId == author.Id && c.price == 0)
                        .Load();
-
 
 ## Repository Pattern
 
@@ -209,12 +213,15 @@ To get records in a given page.
   - properties for repositories.
   - Save method.
 
-
-
-
 ## Tools for Debug
 
 * Microsoft Sql Server Server Management Studio
   * Tools / Sql Profiler - inspect queries run on the database.
 
 * LINQPad - app used to run LINQ code 
+
+## AutoMapper
+
+* ProjectTo IQueryable extension method:
+  - doesn't require Include.
+  - will not work (select only the required members) if AutoMapper solves mapping matching a Get method.

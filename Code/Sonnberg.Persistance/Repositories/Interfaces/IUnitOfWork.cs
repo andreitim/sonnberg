@@ -6,7 +6,7 @@ namespace Sonnberg.Persistance.Repositories
 {
     public interface IUnitOfWork
     {
-        IRepository<SonnUser> Users { get; }
+        IUsersRepository Users { get; }
 
         IRepository<SonnProperty> Properties { get; }
 
